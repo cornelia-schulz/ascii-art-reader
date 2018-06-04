@@ -13,6 +13,7 @@ const readline = require('readline')
 const getAsciiFiles = require('./getAsciiFiles')
 const openAsciiFile = require('./openAsciiFile')
 const addComment = require('./addComment')
+const viewComments = require('./viewComments')
 
 function welcome () {
   const message = 'Welcome to our page'
@@ -67,7 +68,7 @@ function continueArt () {
     output: process.stdout
   })
 
-  rl.question('Would you like to look at more art? y/n \n Press c to leave a comment.', (input) => {
+  rl.question('Would you like to look at more art? y/n \n Press c to leave a comment or v to view all comments.', (input) => {
     rl.close()
     if (input === 'y') {
       getAsciiFiles('data', showFiles)
@@ -75,7 +76,10 @@ function continueArt () {
       process.exit()
     } else if (input === 'c') {
       typeComment()
-    } else {
+    } else if (input === 'v'){
+      viewComments('comment`.txt', showFile)
+    }
+    else {
       console.log('Please press y for yes, n for no')
       continueArt()
     }
@@ -90,7 +94,7 @@ function typeComment () {
 
   rl.question('Type your comment and press enter \n ', (input) => {
     rl.close()
-    addComment(input)
+    addComment(input, continueArt)
   })
 }
 
