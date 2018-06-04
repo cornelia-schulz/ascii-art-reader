@@ -1,7 +1,10 @@
 module.exports = {
   welcome,
   showFiles,
-  continueArt
+  showFile,
+  userInput,
+  continueArt,
+  typeComment
 }
 
 const fs = require('fs')
@@ -10,10 +13,6 @@ const readline = require('readline')
 const getAsciiFiles = require('./getAsciiFiles')
 const openAsciiFile = require('./openAsciiFile')
 const addComment = require('./addComment')
-const rl = readline.createInterface ({
-  input: process.stdin,
-  output: process.stdout
-})
 
 function welcome () {
   const message = 'Welcome to our page'
@@ -26,13 +25,19 @@ function showFiles (err, fileList) {
   for (let index in fileList) {
     list += index + ': ' + fileList[index] + '\n'
   }
+  const rl = readline.createInterface ({
+    input: process.stdin,
+    output: process.stdout
+  })
   rl.question('What art would you like to look at? \n' + list, (input) => {
+    console.log('input',input)
     rl.close()
     if (err) {
       console.error(err)
     } else {
       let index = parseInt(input)
       if (index < fileList.length){
+        console.log(fileList[index])
         openAsciiFile(fileList[index], showFile)
       }
       else {
@@ -54,26 +59,6 @@ function showFile (err, asciiFile) {
 
 function userInput () {
   getAsciiFiles('data', showFiles)
-  // const rl = readline.createInterface({
-  //   input: process.stdin,
-  //   output: process.stdout
-  // })
-
-  // rl.question('What art would you like to look at? \n', (input) => {
-  //   rl.close()
-  //   if (input === '0') {
-  //     openAsciiFile('kea.txt', showFile)
-  //   } else if (input === '1') {
-  //     openAsciiFile('kiwi.txt', showFile)
-  //   } else if (input === '2') {
-  //     openAsciiFile('nikau.txt', showFile)
-  //   } else if (input === '3') {
-  //     openAsciiFile('pohutukawa.txt', showFile)
-  //   }
-  //   process.nextTick(() => {
-  //     continueArt()
-  //   })
-  // })
 }
 
 function continueArt () {
@@ -86,7 +71,6 @@ function continueArt () {
     rl.close()
     if (input === 'y') {
       getAsciiFiles('data', showFiles)
-      userInput()
     } else if (input === 'n') {
       process.exit()
     } else if (input === 'c') {
@@ -109,6 +93,5 @@ function typeComment () {
     addComment(input)
   })
 }
-
 
 userInput()
